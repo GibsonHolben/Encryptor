@@ -7,15 +7,14 @@ public class Main
         String enced = "";
 
         System.out.println("Please enter a encryption/decryption key (Remember the numbers)");
+
         String Seed = sc.nextLine();
         if(Seed.isEmpty() || Seed.equals(" ")){Seed = "0";}
-
         Encryptor Encryptor = new Encryptor(Integer.parseInt(Seed));
 
         System.out.println("encrypt or decrypt? (enc/dec)");
-
-        Encryptor.setSpaceChar("*");
-        Encryptor.setLowerChar("_");
+        Encryptor.setSpaceChar("_");
+        Encryptor.setLowerChar("*");
         sc = new Scanner(System.in);
         switch (sc.nextLine())
         {
