@@ -14,11 +14,12 @@ public class Encryptor
     }
 
     /**An Arraylist that holds all the characters that are supported in the Encryptor*/
-    static ArrayList<String> Letters = new ArrayList<>();
+    ArrayList<String> Letters = new ArrayList<>();
     /**An Arraylist that holds the indexes of the characters*/
-    static ArrayList<Integer> letterNumb = new ArrayList<>();
+    ArrayList<Integer> letterNumb = new ArrayList<>();
 
-    static void load()
+    /***/
+    void load()
     {
         String[] s = {"A","B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "?", "/", "(", ")", "@", "#", "$", "%", "^", "&", "*","-","_","+","=","|",",",".","<",">","`","~","\"","'","\\", "}", "{",""}; //Leave empty char
         for(int i = 1; i < s.length + 1; i++) {
@@ -27,7 +28,8 @@ public class Encryptor
         Collections.addAll(Letters, s);
     }
 
-    public void OffsetList(int seed)
+
+    void OffsetList(int seed)
     {
         load();
         Random random = new Random(seed);
