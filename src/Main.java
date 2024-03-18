@@ -10,7 +10,7 @@ public class Main
         System.out.println("Please enter a encryption/decryption key (Remember the numbers)");
         String Seed = sc.nextLine();
         if(Seed.isEmpty() || Seed.equals(" ")){Seed = "0";}
-        Encryptor = new Encryptor(Integer.parseInt(Seed));
+        Encryptor.seed(Integer.parseInt(Seed));
     }
     public static void main(String[] args){
 
@@ -21,7 +21,16 @@ public class Main
 
         String Seed = sc.nextLine();
         if(Seed.isEmpty() || Seed.equals(" ")){Seed = "0";}
-        Encryptor = new Encryptor(Integer.parseInt(Seed));
+        try
+        {
+            Encryptor = new Encryptor(Integer.parseInt(Seed));
+        }
+        catch(Exception e)
+        {
+            Encryptor = new Encryptor(0);
+            Encryptor.seed(Seed);
+
+        }
         while(keepGoing) {
 
 
@@ -29,7 +38,8 @@ public class Main
             Encryptor.setSpaceChar("_");
             Encryptor.setLowerChar("*");
             sc = new Scanner(System.in);
-            switch (sc.nextLine().toLowerCase())
+            String cmd = sc.nextLine();
+            switch (cmd.toLowerCase())
             {
                 case "enc":
                     System.out.println("Enter a string to encrypt");
@@ -43,10 +53,7 @@ public class Main
                     System.out.println(decrypted);
                     break;
                 case "dump":
-                    for(int i : Encryptor.letterNumb)
-                    {
-                        System.out.println(i + "," + Encryptor.Letters.get(i-1));
-                    }
+                    System.out.println(Encryptor.toString());
                     break;
                 case "exit":
                     keepGoing = false;
@@ -54,8 +61,17 @@ public class Main
                 case "seed":
                     changeSeed();
                     break;
+                case "help":
+                    System.out.println("The commands are:\n" +
+                            "enc  (Encrypts the given string)\n" +
+                            "dec  (Decrypts the given string)\n" +
+                            "dum  (dumps the encryption data)\n" +
+                            "exit (Exits the command line)\n" +
+                            "seed (Changes the seed of the encryptor)\n" +
+                            "help (Shows a help menu)\n");
+                    break;
                 default:
-                    System.out.println("'" + sc.nextLine() + "' is not recognized as a command");
+                    System.out.println("'" + cmd + "' is not recognized as a command");
 
             }
         }

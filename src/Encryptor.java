@@ -6,27 +6,30 @@ import java.util.Random;
 public class Encryptor
 {
 
+    /**An Arraylist that holds all the characters that are supported in the Encryptor*/
+    private ArrayList<String> Letters = new ArrayList<>();
+    /**An Arraylist that holds the indexes of the characters*/
+    private ArrayList<Integer> letterNumb = new ArrayList<>();
+
+    /**Used to hold the seed so that it can be gotten by the user*/
+    private long seed;
+
+    /**The char that is used to signal a lowercase char*/
+    private String LowerChar = "*";
+    /**The char that is used to signal a space*/
+    private String SpaceChar = "_";
+
     /**Creates an Encryptor with a seed that is used for encryption/decryption
      * @param Seed The seed that is used for randomization in the encryption*/
     Encryptor(int Seed)
     {
-        OffsetList(Seed);
+        seed(Seed);
     }
-
-    /**An Arraylist that holds all the characters that are supported in the Encryptor*/
-    ArrayList<String> Letters = new ArrayList<>();
-    /**An Arraylist that holds the indexes of the characters*/
-    ArrayList<Integer> letterNumb = new ArrayList<>();
-
-    /**The char that is used to signal a lowercase char*/
-    String LowerChar = "*";
-    /**The char that is used to signal a space*/
-    String SpaceChar = "_";
 
     /**Used to load the Arraylists with the proper values*/
     void load()
     {
-        String[] s = {"A","B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "?", "/", "(", ")", "@", "#", "$", "%", "^", "&", "*","-","_","+","=","|",",",".","<",">","`","~","\"","'","\\", "}", "{","★","©","®","™","℗","¢",""}; //Leave empty char
+        String[] s = {"1", "2", "3","4","5","6","7","8","9","0","A","B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "?", "/", "(", ")", "@", "#", "$", "%", "^", "&", "*","-","_","+","=","|",",",".","<",">","`","~","\"","'","\\", "}", "{","★","©","®","™","℗","¢",""}; //Leave empty char
         for(int i = 1; i < s.length + 1; i++) {
             letterNumb.add(i);
         }
@@ -37,10 +40,29 @@ public class Encryptor
      * Shuffles the Arraylists with a passed in seed
      * @param seed The seed that is used for randomization of the Arraylists
      */
-    void OffsetList(int seed)
+    public void seed(int seed)
     {
+        this.seed = seed;
         load();
         Random random = new Random(seed);
+        Collections.shuffle(letterNumb, random);
+    }
+    public void seed(String seed)
+    {
+        load();
+        String[] charA = seed.split("");
+        int finish =0;
+        int x = 0;
+        for(String s1 : charA){
+            x +=1;
+            for(String s2 : Letters) {
+                if(s2.equals(s1)) {
+                   finish += x;
+                }
+            }
+        }
+        this.seed = finish;
+        Random random = new Random(finish);
         Collections.shuffle(letterNumb, random);
     }
 
@@ -199,6 +221,28 @@ public class Encryptor
             System.err.println("Space String cannot contain the same charters as the lowercase String");
         }
 
+    }
+
+    /**
+     * Gets the seed of the current encryptor
+     * @return the seed
+     */
+    public long getSeed() {
+        return seed;
+    }
+
+    public String toString()
+    {
+        StringBuilder returns = new StringBuilder();
+        for(int i = 0; i < Letters.size() - 1; i++)
+        {
+            System.out.println(Letters.get(i) + ":" + letterNumb.get(i));
+        }
+
+        returns.append("Lower char: ").append(LowerChar).append("\n");
+        returns.append("Space char: ").append(SpaceChar).append("\n");
+        returns.append(seed).append("\n");
+        return returns.toString();
     }
 
 }
