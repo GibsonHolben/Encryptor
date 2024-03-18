@@ -14,6 +14,8 @@ public class Main
 
         System.out.println("encrypt or decrypt? (enc/dec)");
 
+        Encryptor.setSpaceChar("*");
+        Encryptor.setLowerChar("_");
         sc = new Scanner(System.in);
         switch (sc.nextLine())
         {
