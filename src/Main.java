@@ -12,6 +12,7 @@ public class Main
         if(Seed.isEmpty() || Seed.equals(" ")){Seed = "0";}
         Encryptor.seed(Integer.parseInt(Seed));
     }
+
     public static void main(String[] args){
 
         Scanner sc = new Scanner(System.in);

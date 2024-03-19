@@ -29,10 +29,14 @@ public class Encryptor
     /**Used to load the Arraylists with the proper values*/
     void load()
     {
+        //Creates an array that holds all the chars
         String[] s = {"1", "2", "3","4","5","6","7","8","9","0","A","B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "?", "/", "(", ")", "@", "#", "$", "%", "^", "&", "*","-","_","+","=","|",",",".","<",">","`","~","\"","'","\\", "}", "{","★","©","®","™","℗","¢",""}; //Leave empty char
+
+        //Creates the number key
         for(int i = 1; i < s.length + 1; i++) {
             letterNumb.add(i);
         }
+        //Adds the letters to the array
         Collections.addAll(Letters, s);
     }
 
@@ -42,17 +46,29 @@ public class Encryptor
      */
     public void seed(int seed)
     {
+        //Sets the seed
         this.seed = seed;
+        //Loads the arrays
+
         load();
+        //Randomizes the arrays
         Random random = new Random(seed);
         Collections.shuffle(letterNumb, random);
     }
+    /**
+     * Shuffles the Arraylists with a passed in seed that is a string
+     * @param seed The seed that is used for randomization of the Arraylists
+     */
     public void seed(String seed)
     {
+        //Loads the arrays
         load();
+        //Split the seed into chars
         String[] charA = seed.split("");
+        //Creates variables
         int finish =0;
         int x = 0;
+        //Gets the number values of the chars
         for(String s1 : charA){
             x +=1;
             for(String s2 : Letters) {
@@ -61,7 +77,9 @@ public class Encryptor
                 }
             }
         }
+        //Sets the seed
         this.seed = finish;
+        //Randomizes the Arrays
         Random random = new Random(finish);
         Collections.shuffle(letterNumb, random);
     }
@@ -73,21 +91,26 @@ public class Encryptor
      */
     public String encrypt(String toEnc)
     {
+        //Trims excess b
         if(toEnc.endsWith(".2"))
             toEnc = toEnc.substring(0, toEnc.length() - 2);
+        //Creates variables
         StringBuilder finish = new StringBuilder();
         String[] charArray = toEnc.split("");
         ArrayList<Integer> upperIndex = new ArrayList<>();
+
+        //Loads the upper index
         for(String ignored : charArray) {
             upperIndex.add(0);
         }
+        //Check if letters are lowercase
         for(int i = 0; i < charArray.length; i++) {
             if(isLowerCase(charArray[i])) {
                 charArray[i] = charArray[i].toUpperCase();
                 upperIndex.set(i, 1);
             }
         }
-
+        //Gets the number value and appends special chars (spaces and uppers)
         for(int j = 0; j < charArray.length; j++) {
             try {
                 for(int i = 0; i < Letters.size(); i++) {
@@ -108,6 +131,7 @@ public class Encryptor
                 System.err.println("Could not encrypt. Error: " + e.getMessage());
             }
         }
+        //Returns the encrypted string
         return finish.toString();
     }
 
@@ -119,8 +143,11 @@ public class Encryptor
      */
     public String decrypt(String toDec)
     {
+        //Creates variables
         StringBuilder finish = new StringBuilder();
         String[] intArray = toDec.split("\\.");
+
+        //Converts the numbers to the letter value
         for(String s : intArray) {
             boolean doLower = false;
             boolean doSpace = false;
@@ -147,6 +174,7 @@ public class Encryptor
                 toAp = " ";
             finish.append(toAp);
         }
+        //returns the decrypted string
         return finish.toString();
     }
 
@@ -170,9 +198,11 @@ public class Encryptor
      * @param lowerChar the char to set
      */
     public void setLowerChar(String lowerChar) {
+        //Creates variables
         String[] LowerCharA = lowerChar.split("");//💀
         String[] SpaceCharA = SpaceChar.split("");//💀
         boolean doAppend = true;
+        //Make sure the chars are not the same as the space char
         for(String s : LowerCharA) {
             for(String s2 : SpaceCharA) {
                 if (s.equals(s2)) {
@@ -181,6 +211,7 @@ public class Encryptor
                 }
             }
         }
+        //set the lower chars or return an error
         if(doAppend)
             LowerChar = lowerChar;
         else {
@@ -231,6 +262,10 @@ public class Encryptor
         return seed;
     }
 
+    /**
+     * Returns the objects values in a dump
+     * @return the variables
+     */
     public String toString()
     {
         StringBuilder returns = new StringBuilder();
@@ -241,7 +276,7 @@ public class Encryptor
 
         returns.append("Lower char: ").append(LowerChar).append("\n");
         returns.append("Space char: ").append(SpaceChar).append("\n");
-        returns.append(seed).append("\n");
+        returns.append("Seed: ").append(seed).append("\n");
         return returns.toString();
     }
 
