@@ -45,7 +45,12 @@ public class Main
                 case "enc":
                     System.out.println("Enter a string to encrypt");
                     String toEnc = sc.nextLine();
-                    encrypted = Encryptor.encrypt(toEnc);
+                    try {
+                        encrypted = Encryptor.encrypt(toEnc);
+                    }
+                    catch(CouldNotEncryptError e) {
+                        e.printStackTrace();
+                    }
                     System.out.println(encrypted);
                     break;
                 case "dec":

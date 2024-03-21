@@ -7,9 +7,9 @@ public class Encryptor
 {
 
     /**An Arraylist that holds all the characters that are supported in the Encryptor*/
-    private ArrayList<String> Letters = new ArrayList<>();
+    private final ArrayList<String> Letters = new ArrayList<>();
     /**An Arraylist that holds the indexes of the characters*/
-    private ArrayList<Integer> letterNumb = new ArrayList<>();
+    private final ArrayList<Integer> letterNumb = new ArrayList<>();
 
     /**Used to hold the seed so that it can be gotten by the user*/
     private long seed;
@@ -89,50 +89,58 @@ public class Encryptor
      * @param toEnc The String that is to be encrypted
      * @return The encrypted String
      */
-    public String encrypt(String toEnc)
+    public String encrypt(String toEnc) throws CouldNotEncryptError
     {
-        //Trims excess b
-        if(toEnc.endsWith(".2"))
-            toEnc = toEnc.substring(0, toEnc.length() - 2);
-        //Creates variables
-        StringBuilder finish = new StringBuilder();
-        String[] charArray = toEnc.split("");
-        ArrayList<Integer> upperIndex = new ArrayList<>();
+        try
+        {
+            //Trims excess b
+            if(toEnc.endsWith(".2"))
+                toEnc = toEnc.substring(0, toEnc.length() - 2);
+            //Creates variables
+            StringBuilder finish = new StringBuilder();
+            String[] charArray = toEnc.split("");
+            ArrayList<Integer> upperIndex = new ArrayList<>();
 
-        //Loads the upper index
-        for(String ignored : charArray) {
-            upperIndex.add(0);
-        }
-        //Check if letters are lowercase
-        for(int i = 0; i < charArray.length; i++) {
-            if(isLowerCase(charArray[i])) {
-                charArray[i] = charArray[i].toUpperCase();
-                upperIndex.set(i, 1);
+            //Loads the upper index
+            for(String ignored : charArray) {
+                upperIndex.add(0);
             }
-        }
-        //Gets the number value and appends special chars (spaces and uppers)
-        for(int j = 0; j < charArray.length; j++) {
-            try {
-                for(int i = 0; i < Letters.size(); i++) {
-                    if(charArray[j].equals(Letters.get(i))) {
-                        if(upperIndex.get(j).equals(1)) {
-                            finish.append(letterNumb.get(i)).append(LowerChar).append(".");
-                        }
-                        else {
-                            finish.append(letterNumb.get(i)).append(".");
+            //Check if letters are lowercase
+            for(int i = 0; i < charArray.length; i++) {
+                if(isLowerCase(charArray[i])) {
+                    charArray[i] = charArray[i].toUpperCase();
+                    upperIndex.set(i, 1);
+                }
+            }
+            //Gets the number value and appends special chars (spaces and uppers)
+            for(int j = 0; j < charArray.length; j++) {
+                try {
+                    for(int i = 0; i < Letters.size(); i++) {
+                        if(charArray[j].equals(Letters.get(i))) {
+                            if(upperIndex.get(j).equals(1)) {
+                                finish.append(letterNumb.get(i)).append(LowerChar).append(".");
+                            }
+                            else {
+                                finish.append(letterNumb.get(i)).append(".");
+                            }
                         }
                     }
+                    if (charArray[j].equals(" ")) {
+                        finish.append(SpaceChar).append(".");
+                    }
                 }
-                if (charArray[j].equals(" ")) {
-                    finish.append(SpaceChar).append(".");
+                catch (Exception e) {
+                    System.err.println("Could not encrypt. Error: " + e.getMessage());
                 }
             }
-            catch (Exception e) {
-                System.err.println("Could not encrypt. Error: " + e.getMessage());
-            }
+            //Returns the encrypted string
+            return finish.toString();
         }
-        //Returns the encrypted string
-        return finish.toString();
+        catch (Exception e)
+        {
+            throw new CouldNotEncryptError();
+        }
+
     }
 
     /**
@@ -178,6 +186,8 @@ public class Encryptor
         return finish.toString();
     }
 
+
+
     /**
      * Checks if the passed in String is lowercase
      * @param str The String to check
@@ -190,7 +200,7 @@ public class Encryptor
      * @return the lower char
      */
     public String getLowerChar() {
-        return LowerChar;
+        return new String(LowerChar);
     }
 
     /**
@@ -225,7 +235,7 @@ public class Encryptor
      * @return space char
      */
     public String getSpaceChar() {
-        return SpaceChar;
+        return new String(SpaceChar);
     }
 
     /**
@@ -259,7 +269,8 @@ public class Encryptor
      * @return the seed
      */
     public long getSeed() {
-        return seed;
+        long sd = seed;
+        return sd;
     }
 
     /**
@@ -280,4 +291,12 @@ public class Encryptor
         return returns.toString();
     }
 
+}
+
+class CouldNotEncryptError extends Throwable{
+    public void printStackTrace()
+    {
+        System.err.println("Could not encrypt the given String");
+        super.printStackTrace();
+    }
 }
